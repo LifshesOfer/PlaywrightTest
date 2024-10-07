@@ -1,6 +1,8 @@
-using Microsoft.Playwright.NUnit;
+using System.Text.RegularExpressions;
 
-using PlaywrightTest.PageObjectModels;
+using Microsoft.Playwright.NUnit;
+using PlaywrightTest.Models.PageObjectModels;
+using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
 {
@@ -9,25 +11,24 @@ namespace PlaywrightTest.Tests
     public class ExampleTest : PageTest
     {
         [Test]
-        public async Task HasTitle()
+        public async Task GoToLoginPage()
         {
             var homePage = await HomePage.GotoAsync(Page);
             var loginPage = await homePage.ClickSignIn();
 
-            // Expect a title "to contain" a substring.
             await Expect(loginPage.titleText).ToBeVisibleAsync();
         }
 
-        //[Test]
-        //public async Task GetStartedLink()
-        //{
-        //    await Page.GotoAsync("https://playwright.dev");
+        [Test]
+        public async Task Login()
+        {
+            var user = TestUsers.TrueUser;
+            var inboxPage = await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn())
+                .Then(loginPage => loginPage.Login(user.UserName, user.Password));
 
-        //    // Click the get started link.
-        //    await Page.GetByRole(AriaRole.Link, new() { Name = "Get started" }).ClickAsync();
+            await Expect(Page).ToHaveURLAsync(new Regex(InboxPage.Url));
 
-        //    // Expects page to have a heading with the name of Installation.
-        //    await Expect(Page.GetByRole(AriaRole.Heading, new() { Name = "Installation" })).ToBeVisibleAsync();
-        //}
+        }
     }
 }
