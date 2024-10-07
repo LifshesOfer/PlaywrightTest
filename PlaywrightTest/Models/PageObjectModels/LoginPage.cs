@@ -1,8 +1,7 @@
 ﻿using Microsoft.Playwright;
+using PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount;
 
-using PlaywrightTest.PageObjectModels.Menus.CreateAccount;
-
-namespace PlaywrightTest.PageObjectModels
+namespace PlaywrightTest.Models.PageObjectModels
 {
     internal class LoginPage(IPage page) : PageObject(page)
     {
@@ -29,12 +28,13 @@ namespace PlaywrightTest.PageObjectModels
             await nextButton.ClickAsync();
         }
 
-        public async Task Login(string userName, string password)
+        public async Task<InboxPage> Login(string userName, string password)
         {
             await EnterUsername(userName);
             await ClickNext();
             await EnterPassword(password);
             await ClickNext();
+            return new InboxPage(_page);
         }
 
         public async Task<CreateAccountMenu> ClickCreate()

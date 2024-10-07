@@ -1,6 +1,7 @@
 ﻿using Microsoft.Playwright;
+using PlaywrightTest.Models.PageObjectModels;
 
-namespace PlaywrightTest.PageObjectModels.Menus.CreateAccount
+namespace PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount
 {
     internal class CreateAccountMenu(IPage page) : PageObject(page)
     {

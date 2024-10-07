@@ -1,10 +1,10 @@
 ﻿using Microsoft.Playwright;
 
-namespace PlaywrightTest.PageObjectModels
+namespace PlaywrightTest.Models.PageObjectModels
 {
     internal class HomePage(IPage page) : PageObject(page)
     {
-        public const string Url = "https://www.google.com/intl/en-US/gmail/about/"; 
+        public const string Url = "https://www.google.com/intl/en-US/gmail/about/";
         public readonly ILocator signInButton = page.Locator("[data-action='sign in']");
 
         public static async Task<HomePage> GotoAsync(IPage page)

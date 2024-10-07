@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaywrightTest.PageObjectModels.Menus.CreateAccount
+namespace PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount
 {
     public static class CreateAccountOptions
     {

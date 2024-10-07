@@ -1,6 +1,6 @@
 ﻿using Microsoft.Playwright;
 
-namespace PlaywrightTest.PageObjectModels
+namespace PlaywrightTest.Models.PageObjectModels
 {
     internal abstract class PageObject(IPage page)
     {
