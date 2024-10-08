@@ -8,7 +8,7 @@ namespace PlaywrightTest.Tests
 {
     //[Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    public class ExampleTest : PageTest
+    public class PositiveTests : PageTest
     {
         [Test]
         public async Task GoToLoginPage()
@@ -28,7 +28,6 @@ namespace PlaywrightTest.Tests
                 .Then(loginPage => loginPage.Login(user.UserName, user.Password));
 
             await Expect(Page).ToHaveURLAsync(new Regex(InboxPage.Url));
-
         }
     }
 }
