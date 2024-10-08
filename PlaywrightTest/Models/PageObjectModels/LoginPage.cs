@@ -28,13 +28,24 @@ namespace PlaywrightTest.Models.PageObjectModels
             await nextButton.ClickAsync();
         }
 
+        public async Task<LoginPage> ContinueToPasswordInput()
+        {
+            await ClickNext();
+            return this;
+        }
+
+        public async Task<InboxPage> ContinueToInboxPage()
+        {
+            await ClickNext();
+            return new InboxPage(_page);
+        }
+
         public async Task<InboxPage> Login(string userName, string password)
         {
             await EnterUsername(userName);
-            await ClickNext();
+            await ContinueToPasswordInput();
             await EnterPassword(password);
-            await ClickNext();
-            return new InboxPage(_page);
+            return await ContinueToInboxPage();
         }
 
         public async Task<CreateAccountMenu> ClickCreate()
