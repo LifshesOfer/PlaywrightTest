@@ -1,6 +1,7 @@
 using System.Text.RegularExpressions;
 
 using PlaywrightTest.Models.PageObjectModels;
+using PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount;
 using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
@@ -27,6 +28,24 @@ namespace PlaywrightTest.Tests
                 .Then(loginPage => loginPage.Login(user.UserName, user.Password));
 
             await Expect(Page).ToHaveURLAsync(new Regex(InboxPage.Url));
+        }
+
+        [Test]
+        public async Task CheckCreateOptions()
+        {
+            var createMenu = await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn())
+                .Then(loginPage => loginPage.ClickCreate());
+
+            await createMenu.DropdownList.IsVisibleAsync();
+            var menuList = await createMenu.MenuItems.AllInnerTextsAsync();
+            var expectedList = new List<string> 
+            { 
+                CreateAccountOptions.ForMyself,
+                CreateAccountOptions.ForBusiness,
+                CreateAccountOptions.ForChild
+            };
+            Assert.That(menuList, Is.EquivalentTo(expectedList));
         }
     }
 }
