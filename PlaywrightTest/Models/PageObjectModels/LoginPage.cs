@@ -5,10 +5,10 @@ namespace PlaywrightTest.Models.PageObjectModels
 {
     internal class LoginPage(IPage page) : PageObject(page)
     {
-        public readonly ILocator titleText = page.Locator("//*[@id='headingText']/span[text()='Sign in']");
-        public readonly ILocator userInput = page.Locator("//input[@type='email']");
-        public readonly ILocator passInput = page.Locator("//input[@type='password']");
-        public readonly ILocator nextButton = page.Locator("//button/span[text()='Next']");
+        public readonly ILocator titleText = page.GetByText("to continue to Gmail");
+        public readonly ILocator userInput = page.Locator("#identifierId");
+        public readonly ILocator passInput = page.Locator("input[type='password']");
+        public readonly ILocator nextButton = page.GetByText("Next");
         public readonly ILocator createButton = page.Locator("//button/span[text()='Create account']");
 
         public async Task<LoginPage> EnterUsername(string userName)
