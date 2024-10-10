@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<RunConfiguration>
+		<EnvironmentVariables>
+		  <!-- For debugging selectors, it's recommend to set the following environment variable -->
+		  <!-- <DEBUG>pw:api</DEBUG> -->
+		</EnvironmentVariables>
+	</RunConfiguration>
+	<Playwright>
+		<BrowserName>firefox</BrowserName>
+		<LaunchOptions>
+			<Headless>false</Headless>
+		</LaunchOptions>
+	</Playwright>
+</RunSettings>
