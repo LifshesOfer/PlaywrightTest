@@ -16,7 +16,7 @@ namespace PlaywrightTest.Tests
             var homePage = await HomePage.GotoAsync(Page);
             var loginPage = await homePage.ClickSignIn();
 
-            await Expect(loginPage.titleText).ToBeVisibleAsync();
+            await Expect(loginPage.userInput).ToBeVisibleAsync();
         }
 
         [Test]
