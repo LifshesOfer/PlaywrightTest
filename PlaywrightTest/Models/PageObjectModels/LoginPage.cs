@@ -50,6 +50,9 @@ namespace PlaywrightTest.Models.PageObjectModels
 
         public async Task<CreateAccountMenu> ClickCreate()
         {
+            var createAccountMenu = new CreateAccountMenu(_page);
+            await createAccountMenu.DropdownList.WaitForAsync(new() { State = WaitForSelectorState.Attached });
+
             await createButton.ClickAsync();
             return new CreateAccountMenu(_page);
         }
