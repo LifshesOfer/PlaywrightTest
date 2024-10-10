@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using Microsoft.Playwright;
-using Microsoft.Playwright.NUnit;
-
-using PlaywrightTest.Models.PageObjectModels;
+﻿using PlaywrightTest.Models.PageObjectModels;
 
 using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
 {
+    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    public class NegativeTests : PageTest
+    public class NegativeTests : BaseTest
     {
+        
+
         [Test]
         public async Task LoginWithIncorrectPassword()
         {

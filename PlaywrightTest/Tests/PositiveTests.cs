@@ -1,14 +1,13 @@
 using System.Text.RegularExpressions;
 
-using Microsoft.Playwright.NUnit;
 using PlaywrightTest.Models.PageObjectModels;
 using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
 {
-    //[Parallelizable(ParallelScope.Self)]
+    [Parallelizable(ParallelScope.Self)]
     [TestFixture]
-    public class PositiveTests : PageTest
+    public class PositiveTests : BaseTest
     {
         [Test]
         public async Task GoToLoginPage()
