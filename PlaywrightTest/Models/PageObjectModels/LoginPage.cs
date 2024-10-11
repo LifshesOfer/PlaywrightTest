@@ -40,13 +40,7 @@ namespace PlaywrightTest.Models.PageObjectModels
             return new InboxPage(_page);
         }
 
-        public async Task<InboxPage> Login(string userName, string password)
-        {
-            await EnterUsername(userName);
-            await ContinueToPasswordInput();
-            await EnterPassword(password);
-            return await ContinueToInboxPage();
-        }
+        
 
         public async Task<CreateAccountMenu> ClickCreate()
         {

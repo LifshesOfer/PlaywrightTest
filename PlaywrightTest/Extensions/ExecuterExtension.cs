@@ -1,6 +1,6 @@
-﻿namespace PlaywrightTest
+﻿namespace PlaywrightTest.Extensions
 {
-    public static class ExecuterExtension
+    internal static class ExecuterExtension
     {
         public static async Task<TOut> Then<TIn, TOut>(this Task<TIn> inputTask, Func<TIn, Task<TOut>> followedByFunc)
         {

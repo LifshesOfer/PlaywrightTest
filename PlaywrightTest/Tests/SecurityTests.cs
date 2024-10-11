@@ -1,4 +1,5 @@
-﻿using PlaywrightTest.Models.PageObjectModels;
+﻿using PlaywrightTest.Extensions;
+using PlaywrightTest.Models;
 using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
@@ -26,10 +27,8 @@ namespace PlaywrightTest.Tests
         [TestCaseSource(nameof(UserSqlInjectionData))]
         public async Task CheckSqlInUserName_ExpectErrorMessage(string sql, string expected)
         {
-            await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.EnterUsername(sql))
-                .Then(loginPage => loginPage.ContinueToPasswordInput());
+            await this.GoToLogin()
+                .Then(loginPage => loginPage.EnterUserAndContinue(sql));
 
             await Expect(Page.GetByText(expected)).ToBeVisibleAsync();
         }
@@ -38,10 +37,9 @@ namespace PlaywrightTest.Tests
         [TestCaseSource(nameof(PasswordSqlInjectionData))]
         public async Task CheckSqlInPassword_ExpectErrorMessage(string sql, string expected)
         {
-            var userName = TestUsers.TrueUser.UserName;
-            await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(LoginPage => LoginPage.Login(userName, sql));
+            var user = new User(TestUsers.TrueUser.UserName, sql);
+
+            await this.FullLogin(user);
 
             await Expect(Page.GetByText(expected)).ToBeVisibleAsync();
         }
@@ -49,11 +47,10 @@ namespace PlaywrightTest.Tests
         [Test]
         public async Task MultipleLoginWithIncorrectUserName_ExpectCaptcha()
         {
-            var user = TestUsers.WrongUser;
-            var login = await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.EnterUsername(user.UserName))
-                .Then(loginPage => loginPage.ContinueToPasswordInput());
+            var userName = TestUsers.WrongUser.UserName;
+            var login = await this.GoToLogin()
+                .Then(loginPage => loginPage.EnterUserAndContinue(userName));
+                
 
             int counterUntilCaptcha = 1;
             var captchaText = "Type the text you hear or see";

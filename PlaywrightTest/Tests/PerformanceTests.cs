@@ -1,10 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
 
-using Microsoft.Playwright;
-
+using PlaywrightTest.Extensions;
 using PlaywrightTest.Models.PageObjectModels;
-using PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount;
 using PlaywrightTest.TestData;
 
 namespace PlaywrightTest.Tests
@@ -63,10 +60,8 @@ namespace PlaywrightTest.Tests
             var user = TestUsers.TrueUser;
             
             //measure
-            var elapsed = await Time(() =>
-                    HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.Login(user.UserName, user.Password)));
+            var elapsed = await Time(() => this.FullLogin(user));
+
 
             Console.WriteLine(elapsed);
             Assert.That(elapsed, Is.LessThan(TimeSpan.FromSeconds(5)));

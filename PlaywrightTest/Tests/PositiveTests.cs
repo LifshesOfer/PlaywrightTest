@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 
-using Microsoft.Playwright;
-
+using PlaywrightTest.Extensions;
 using PlaywrightTest.Models.PageObjectModels;
 using PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount;
 using PlaywrightTest.TestData;
@@ -15,8 +14,7 @@ namespace PlaywrightTest.Tests
         [Test]
         public async Task GoToLoginPage()
         {
-            var homePage = await HomePage.GotoAsync(Page);
-            var loginPage = await homePage.ClickSignIn();
+            var loginPage = await this.GoToLogin();
 
             await Expect(loginPage.userInput).ToBeVisibleAsync();
         }
@@ -25,10 +23,8 @@ namespace PlaywrightTest.Tests
         public async Task Login()
         {
             var user = TestUsers.TrueUser;
-            
-            await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.Login(user.UserName, user.Password));
+
+            await this.FullLogin(user);
 
             await Expect(Page).ToHaveURLAsync(new Regex(InboxPage.Url));
         }
@@ -36,14 +32,13 @@ namespace PlaywrightTest.Tests
         [Test]
         public async Task ContinueToPasswordInput()
         {
-            var user = TestUsers.TrueUser;
+            var userName = TestUsers.TrueUser.UserName;
 
-            var loginPage = await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.EnterUsername(user.UserName))
-                .Then(loginPage => loginPage.ContinueToPasswordInput());
+            var login = await this.GoToLogin()
+                .Then(loginPage => loginPage.EnterUserAndContinue(userName));
 
-            await Expect(loginPage.passInput).ToBeVisibleAsync();
+
+            await Expect(login.passInput).ToBeVisibleAsync();
         }
 
         [Test]
@@ -51,9 +46,7 @@ namespace PlaywrightTest.Tests
         {
             //initial login
             var user = TestUsers.TrueUser;
-            await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
-                .Then(loginPage => loginPage.Login(user.UserName, user.Password));
+            await this.FullLogin(user);
 
             // await full inbox page load
             await Page.WaitForURLAsync(new Regex("#inbox$"));
@@ -68,8 +61,7 @@ namespace PlaywrightTest.Tests
         [Test]
         public async Task CheckCreateOptions()
         {
-            var createMenu = await HomePage.GotoAsync(Page)
-                .Then(homePage => homePage.ClickSignIn())
+            var createMenu = await this.GoToLogin()
                 .Then(loginPage => loginPage.ClickCreate());
 
             await createMenu.DropdownList.IsVisibleAsync();

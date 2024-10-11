@@ -25,16 +25,19 @@ namespace PlaywrightTest.Tests
             await OnTeardown();
             var failed = TestContext.CurrentContext.Result.Outcome == NUnit.Framework.Interfaces.ResultState.Error
            || TestContext.CurrentContext.Result.Outcome == NUnit.Framework.Interfaces.ResultState.Failure;
-
-            await Context.Tracing.StopAsync(new()
+            if (failed)
             {
-                Path = failed ? Path.Combine(
+                var tracePath = Path.Combine(
                     TestContext.CurrentContext.WorkDirectory,
                     "../../../../playwright-traces",
                     dateTime,
                     $"{TestContext.CurrentContext.Test.ClassName}.{TestContext.CurrentContext.Test.Name}.zip"
-                ) : null,
-            });
+                );
+                await Context.Tracing.StopAsync(new()
+                {
+                    Path = tracePath,
+                });
+            }
         }
 
         public virtual async Task OnTeardown()
