@@ -1,5 +1,7 @@
 using System.Text.RegularExpressions;
 
+using Microsoft.Playwright;
+
 using PlaywrightTest.Models.PageObjectModels;
 using PlaywrightTest.Models.PageObjectModels.Menus.CreateAccount;
 using PlaywrightTest.TestData;
@@ -23,11 +25,31 @@ namespace PlaywrightTest.Tests
         public async Task Login()
         {
             var user = TestUsers.TrueUser;
-            var inboxPage = await HomePage.GotoAsync(Page)
+            
+            await HomePage.GotoAsync(Page)
                 .Then(homePage => homePage.ClickSignIn())
                 .Then(loginPage => loginPage.Login(user.UserName, user.Password));
 
             await Expect(Page).ToHaveURLAsync(new Regex(InboxPage.Url));
+        }
+
+        [Test]
+        public async Task LoginThenNavigateToHomePage_ExpectAccountChoiceList()
+        {
+            //initial login
+            var user = TestUsers.TrueUser;
+            await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn())
+                .Then(loginPage => loginPage.Login(user.UserName, user.Password));
+
+            // await full inbox page load
+            await Page.WaitForURLAsync(new Regex("#inbox$"));
+
+            // navigate back to home page
+            await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn());
+
+            await Expect(Page.Locator($"[data-email='{user.UserName}']")).ToBeVisibleAsync();
         }
 
         [Test]
