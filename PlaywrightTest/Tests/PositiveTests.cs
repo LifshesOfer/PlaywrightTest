@@ -34,6 +34,19 @@ namespace PlaywrightTest.Tests
         }
 
         [Test]
+        public async Task ContinueToPasswordInput()
+        {
+            var user = TestUsers.TrueUser;
+
+            var loginPage = await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn())
+                .Then(loginPage => loginPage.EnterUsername(user.UserName))
+                .Then(loginPage => loginPage.ContinueToPasswordInput());
+
+            await Expect(loginPage.passInput).ToBeVisibleAsync();
+        }
+
+        [Test]
         public async Task LoginThenNavigateToHomePage_ExpectAccountChoiceList()
         {
             //initial login
