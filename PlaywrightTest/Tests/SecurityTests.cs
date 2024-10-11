@@ -45,5 +45,25 @@ namespace PlaywrightTest.Tests
 
             await Expect(Page.GetByText(expected)).ToBeVisibleAsync();
         }
+
+        [Test]
+        public async Task MultipleLoginWithIncorrectUserName_ExpectCaptcha()
+        {
+            var user = TestUsers.WrongUser;
+            var login = await HomePage.GotoAsync(Page)
+                .Then(homePage => homePage.ClickSignIn())
+                .Then(loginPage => loginPage.EnterUsername(user.UserName))
+                .Then(loginPage => loginPage.ContinueToPasswordInput());
+
+            int counterUntilCaptcha = 1;
+            var captchaText = "Type the text you hear or see";
+            while (await Page.GetByText(captchaText).IsHiddenAsync())
+            {
+                await login.ContinueToPasswordInput();
+                counterUntilCaptcha++;
+            }
+            Assert.That(counterUntilCaptcha, Is.GreaterThan(1));
+            await Expect(Page.GetByText(captchaText)).ToBeVisibleAsync();
+        }
     }
 }
