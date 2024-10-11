@@ -18,7 +18,7 @@ namespace PlaywrightTest.Tests
                 .Then(homePage => homePage.ClickSignIn())
                 .Then(loginPage => loginPage.Login(user.UserName, user.Password));
 
-            await Expect(Page.GetByText("Wrong password. Try again or click Forgot password to reset it.")).ToBeVisibleAsync();
+            await Expect(Page.GetByText(ErrorMessages.IncorrectPassword)).ToBeVisibleAsync();
         }
 
         [Test]
@@ -30,7 +30,7 @@ namespace PlaywrightTest.Tests
                 .Then(loginPage => loginPage.EnterUsername(user.UserName))
                 .Then(loginPage => loginPage.ContinueToPasswordInput());
 
-            await Expect(Page.GetByText("Couldn’t find your Google Account")).ToBeVisibleAsync();
+            await Expect(Page.GetByText(ErrorMessages.IncorrectUserName)).ToBeVisibleAsync();
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace PlaywrightTest.Tests
                 .Then(loginPage => loginPage.EnterUsername(""))
                 .Then(loginPage => loginPage.ContinueToPasswordInput());
 
-            await Expect(Page.GetByText("Enter an email or phone number")).ToBeVisibleAsync();
+            await Expect(Page.GetByText(ErrorMessages.NoUserName)).ToBeVisibleAsync();
         }
 
         [Test]
@@ -54,14 +54,14 @@ namespace PlaywrightTest.Tests
                 .Then(loginPage => loginPage.ContinueToPasswordInput());
 
             int counterUntilCaptcha = 1;
-
-            while(await Page.GetByText("Type the text you hear or see").IsHiddenAsync())
+            var captchaText = "Type the text you hear or see";
+            while (await Page.GetByText(captchaText).IsHiddenAsync())
             {
                 await login.ContinueToPasswordInput();
                 counterUntilCaptcha++;
             }
             Assert.That(counterUntilCaptcha, Is.GreaterThan(1));
-            await Expect(Page.GetByText("Type the text you hear or see")).ToBeVisibleAsync();
+            await Expect(Page.GetByText(captchaText)).ToBeVisibleAsync();
         }
     }
 }
